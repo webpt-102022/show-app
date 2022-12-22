@@ -15,7 +15,10 @@ const showSchema = new Schema({
     type: String,
     default: 'No description was provided yet'
   }
-});
+},
+  {
+    timestamps: true
+  });
 
 const Show = mongoose.model('Show', showSchema);
 

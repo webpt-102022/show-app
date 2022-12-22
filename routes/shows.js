@@ -25,6 +25,36 @@ router.get('/search', async function (req, res, next) {
   }
 });
 
+/* GET form view */
+/* ROUTE /shows/new */
+router.get('/new', function (req, res, next) {
+  res.render('newShow');
+});
+
+/* POST get users show inputs */
+/* ROUTE /shows/new */
+router.post('/new', async function (req, res, next) {
+  const { title, year, image, description } = req.body;
+  try {
+    const createdShow = await Show.create({ title, year, image, description });
+    res.redirect(`/shows/${createdShow._id}`);
+  } catch (error) {
+    next(error)
+  }
+});
+
+/* GET delete show */
+/* ROUTE /shows/delete/:id */
+router.get('/delete/:id', async function (req, res, next) {
+  const { id } = req.params;
+  try {
+    await Show.findByIdAndDelete(id);
+    res.redirect(`/shows`);
+  } catch (error) {
+    next(error)
+  }
+});
+
 /* GET one show */
 /* ROUTE /shows/:showId */
 router.get('/:showId', async function (req, res, next) {

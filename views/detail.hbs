@@ -3,4 +3,10 @@
   <h4>{{title}}</h4>
   <img width="150px" src={{image}} alt={{title}}/>
   <p>Sinopsis: {{description}} Released in {{year}}.</p>
+  <a href="/shows/delete/{{_id}}">Delete</a>
+
+  {{!-- <form method="POST" action="/shows/delete/{{_id}}">
+    <button type="submit">Delete</button>
+  </form>   Then the route should be router.post --}}
+
 </div>

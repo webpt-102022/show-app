@@ -1,0 +1,13 @@
+<h2>New show</h2>
+
+<form method="POST" action="/shows/new">
+  <label>Show's title</label>
+  <input required type="text" name="title" placeholder="Friends"/>
+  <label>Show's release year</label>
+  <input required type="number" name="year" placeholder="1990"/>
+  <label>Show's picture</label>
+  <input required type="text" name="image" placeholder="https...//"/>
+  <label>What's this show about?</label>
+  <textarea required name="description"></textarea>
+  <button type="submit">Create</button>
+</form>
