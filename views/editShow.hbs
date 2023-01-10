@@ -1,0 +1,13 @@
+<h2>Editing show {{title}}</h2>
+
+<form method="POST" action="/shows/edit/{{_id}}">
+  <label>Show's title</label>
+  <input required type="text" name="title" value="{{title}}"/>
+  <label>Show's release year</label>
+  <input required type="number" name="year" value="{{year}}"/>
+  <label>Show's picture</label>
+  <input required type="text" name="image" value="{{image}}"/>
+  <label>What's this show about?</label>
+  <textarea required name="description">{{description}}</textarea>
+  <button type="submit">Save changes</button>
+</form>

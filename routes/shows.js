@@ -6,7 +6,7 @@ const Show = require('../models/Show');
 /* ROUTE /shows */
 router.get('/', async function (req, res, next) {
   try {
-    const shows = await Show.find({});
+    const shows = await Show.find({}).sort({ title: 1 });
     res.render('showView', { shows });
   } catch (error) {
     next(error)
@@ -20,6 +20,31 @@ router.get('/search', async function (req, res, next) {
   try {
     const show = await Show.findOne({ title: title });
     res.render('search', { query: title, show: show });
+  } catch (error) {
+    next(error)
+  }
+});
+
+/* GET edit form view */
+/* ROUTE /shows/edit/:showId */
+router.get('/edit/:showId', async function (req, res, next) {
+  const { showId } = req.params;
+  try {
+    const show = await Show.findById(showId);
+    res.render('editShow', show);
+  } catch (error) {
+    next(error)
+  }
+});
+
+/* POST get users show inputs */
+/* ROUTE /shows/new */
+router.post('/edit/:showId', async function (req, res, next) {
+  const { title, year, image, description } = req.body;
+  const { showId } = req.params;
+  try {
+    const editedShow = await Show.findByIdAndUpdate(showId, { title, year, image, description }, { new: true });
+    res.redirect(`/shows/${editedShow._id}`);
   } catch (error) {
     next(error)
   }
