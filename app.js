@@ -10,6 +10,8 @@ const hbs = require('hbs');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const showsRouter = require('./routes/shows');
+const seasonRouter = require('./routes/seasons');
+const reviewRouter = require('./routes/reviews');
 
 const app = express();
 
@@ -27,6 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/shows', showsRouter);
+app.use('/seasons', seasonRouter);
+app.use('/reviews', reviewRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -14,6 +14,10 @@ const showSchema = new Schema({
   description: {
     type: String,
     default: 'No description was provided yet'
+  },
+  seasons: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Season'
   }
 },
   {

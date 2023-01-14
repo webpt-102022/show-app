@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Show = require('../models/Show');
+const Season = require('../models/Season');
+const Review = require('../models/Review');
 
 /* GET all shows */
 /* ROUTE /shows */
@@ -70,10 +72,13 @@ router.post('/new', async function (req, res, next) {
 
 /* GET delete show */
 /* ROUTE /shows/delete/:id */
-router.get('/delete/:id', async function (req, res, next) {
-  const { id } = req.params;
+router.get('/delete/:showId', async function (req, res, next) {
+  const { showId } = req.params;
   try {
-    await Show.findByIdAndDelete(id);
+    const show = await Show.findById(showId);
+    await Season.deleteMany({ _id: { $in: show.seasons } });
+    await Review.deleteMany({ show: showId })
+    await Show.deleteOne({ _id: showId })
     res.redirect(`/shows`);
   } catch (error) {
     next(error)
@@ -85,8 +90,9 @@ router.get('/delete/:id', async function (req, res, next) {
 router.get('/:showId', async function (req, res, next) {
   const { showId } = req.params;
   try {
-    const show = await Show.findById(showId);
-    res.render('detail', show);
+    const show = await Show.findById(showId).populate('seasons');
+    const reviews = await Review.find({ show: showId });
+    res.render('detail', { show, reviews });
   } catch (error) {
     next(error)
   }
