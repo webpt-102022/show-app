@@ -25,7 +25,7 @@
     {{/each}}
   {{/if}}
 
-  <form method="POST" action="/seasons/new/{{_id}}">
+  <form method="POST" action="/seasons/new/{{show._id}}">
     <label>Season number:</label>
     <input type="number" placeholder="1" name="number"/>
     <label>Release year:</label>
@@ -37,7 +37,7 @@
     <button type="submit">Save season</button>
   </form>
 
-  <form method="POST" action="/reviews/new/{{_id}}">
+  <form method="POST" action="/reviews/new/{{show._id}}">
     <label>How would you rate this show?</label>
     <input type="number" placeholder="5" name="stars"/>
     <label>Comment:</label>
