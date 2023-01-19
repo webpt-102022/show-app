@@ -3,6 +3,7 @@ const router = express.Router();
 const Show = require('../models/Show');
 const Season = require('../models/Season');
 const Review = require('../models/Review');
+const isLoggedIn = require('../middlewares');
 
 /* GET all shows */
 /* ROUTE /shows */
@@ -29,7 +30,7 @@ router.get('/search', async function (req, res, next) {
 
 /* GET edit form view */
 /* ROUTE /shows/edit/:showId */
-router.get('/edit/:showId', async function (req, res, next) {
+router.get('/edit/:showId', isLoggedIn, async function (req, res, next) {
   const { showId } = req.params;
   try {
     const show = await Show.findById(showId);
@@ -41,7 +42,7 @@ router.get('/edit/:showId', async function (req, res, next) {
 
 /* POST get users show inputs */
 /* ROUTE /shows/new */
-router.post('/edit/:showId', async function (req, res, next) {
+router.post('/edit/:showId', isLoggedIn, async function (req, res, next) {
   const { title, year, image, description } = req.body;
   const { showId } = req.params;
   try {
@@ -54,13 +55,13 @@ router.post('/edit/:showId', async function (req, res, next) {
 
 /* GET form view */
 /* ROUTE /shows/new */
-router.get('/new', function (req, res, next) {
+router.get('/new', isLoggedIn, function (req, res, next) {
   res.render('newShow');
 });
 
 /* POST get users show inputs */
 /* ROUTE /shows/new */
-router.post('/new', async function (req, res, next) {
+router.post('/new', isLoggedIn, async function (req, res, next) {
   const { title, year, image, description } = req.body;
   try {
     const createdShow = await Show.create({ title, year, image, description });
@@ -72,7 +73,7 @@ router.post('/new', async function (req, res, next) {
 
 /* GET delete show */
 /* ROUTE /shows/delete/:id */
-router.get('/delete/:showId', async function (req, res, next) {
+router.get('/delete/:showId', isLoggedIn, async function (req, res, next) {
   const { showId } = req.params;
   try {
     const show = await Show.findById(showId);
@@ -89,10 +90,11 @@ router.get('/delete/:showId', async function (req, res, next) {
 /* ROUTE /shows/:showId */
 router.get('/:showId', async function (req, res, next) {
   const { showId } = req.params;
+  const user = req.session.currentUser;
   try {
     const show = await Show.findById(showId).populate('seasons');
     const reviews = await Review.find({ show: showId });
-    res.render('detail', { show, reviews });
+    res.render('detail', { show, reviews, user });
   } catch (error) {
     next(error)
   }

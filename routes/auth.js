@@ -21,11 +21,6 @@ router.post('/signup', async function (req, res, next) {
     res.render('auth/signup', { error: 'Password needs to contain at least 6 characters, one number, one lowercase and one uppercase letter.' });
     return;
   }
-  // const regexEmail = /^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
-  // if (!regexEmail.test(email)) {
-  //   res.render('auth/signup', { error: 'Please add a valid email' });
-  //   return;
-  // }
   try {
     const userInDB = await User.findOne({ email: email });
     if (userInDB) {
@@ -61,8 +56,13 @@ router.post('/login', async function (req, res, next) {
       res.render('auth/login', { error: `There are no users by ${email}` });
       return;
     } else {
+      // const userForCookie = {
+      //   username: userInDB.username,
+      //   email: userInDB.email
+      // }
       const passwordMatch = await bcrypt.compare(password, userInDB.hashedPassword);
       if (passwordMatch) {
+        req.session.currentUser = userInDB;
         res.render('auth/profile', userInDB);
       } else {
         res.render('auth/login', { error: 'Unable to authenticate user' });
@@ -72,6 +72,18 @@ router.post('/login', async function (req, res, next) {
   } catch (error) {
     next(error)
   }
+});
+
+/* GET logout */
+router.get('/logout', (req, res, next) => {
+  req.session.destroy((err) => {
+    if (err) {
+      next(err)
+    } else {
+      res.clearCookie('show-app')
+      res.redirect('/auth/login');
+    }
+  });
 });
 
 module.exports = router;

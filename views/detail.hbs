@@ -37,15 +37,17 @@
     <button type="submit">Save season</button>
   </form>
 
+  {{#if user}}
   <form method="POST" action="/reviews/new/{{show._id}}">
     <label>How would you rate this show?</label>
     <input type="number" placeholder="5" name="stars"/>
     <label>Comment:</label>
     <input type="text" placeholder="I really liked this show" name="comment"/>
-    <label>User's name:</label>
-    <input type="text" placeholder="John Doe" name="username"/>
+    {{!-- <label>User's name:</label>
+    <input type="text" placeholder="John Doe" name="username"/> --}}
     <button type="submit">Add review</button>
   </form>
+  {{/if}}
 
 
 </div>

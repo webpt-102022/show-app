@@ -5,7 +5,8 @@ const Review = require('../models/Review');
 /* POST new review */
 /* ROUTE /reviews/new/:showId */
 router.post('/new/:showId', async function (req, res, next) {
-  const { stars, comment, username } = req.body;
+  const { stars, comment } = req.body;
+  const { username } = req.session.currentUser;
   const { showId } = req.params;
   try {
     await Review.create({ stars, comment, username, show: showId });

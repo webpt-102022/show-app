@@ -6,6 +6,8 @@ const logger = require('morgan');
 require('dotenv').config(); // Tenemos que decirle a app.js que usaremos dotenv
 require('./db');
 const hbs = require('hbs');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -27,8 +29,28 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// For deployment
+app.set('trust proxy', 1);
+app.use(
+  session({
+    name: 'show-app',
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 2592000000 // 30 days in milliseconds
+    },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URL
+    })
+  })
+)
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', usersRouter);
 app.use('/shows', showsRouter);
 app.use('/seasons', seasonRouter);
 app.use('/reviews', reviewRouter);
